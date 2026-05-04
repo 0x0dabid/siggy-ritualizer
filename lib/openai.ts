@@ -38,7 +38,7 @@ Turn the final image into a premium manga cover illustration.
 Add a large, bold manga-style title that clearly says:
 “RITUAL TESTNET ARC”
 
-Place the title so that the TOP of the tallest letter starts no closer than 8% from the top edge of the image. There must be visible empty space above the title. Do not let the title bleed into or past the top edge.
+Place the title at the BOTTOM of the cover. The BOTTOM of the tallest letter must sit no closer than 8% from the bottom edge of the image. There must be visible empty space below the title. Do not let the title bleed into or past the bottom edge.
 
 Add Japanese text integrated into the cover design, including:
 “リチュアル・テストネット・アーク”
@@ -82,7 +82,7 @@ Background:
 Use [BACKGROUND FROM IMAGE A] adapted into the same manga cover style. Reinterpret the background with dramatic manga aesthetics such as halftone textures, smoky energy, magical effects, speed lines, glowing particles, stylized environmental details, or a mystical atmosphere depending on Image A. Keep it visually rich, but make sure the black cat remains the clear focal point.
 
 IMPORTANT COMPOSITION RULE:
-The final image must be a complete 1:1 square composition with safe margins. Keep all important elements fully inside the frame. No element may touch or bleed past any edge. Treat the outer 8% on every side as a hard no-text, no-element exclusion zone — nothing may enter this zone. The title "RITUAL TESTNET ARC" must sit entirely within the safe zone, with its top edge at least 8% from the top of the image. Side Japanese text must have at least 5% clearance from the left and right edges. Corner stickers must have at least 5% clearance from the bottom and side edges. Use a centered full-cover composition, not an extreme close-up. The artwork should feel like a complete manga cover fully contained inside a square frame with clear breathing room on every side.
+The final image must be a complete 1:1 square composition with safe margins. Keep all important elements fully inside the frame. No element may touch or bleed past any edge. Treat the outer 8% on every side as a hard no-text, no-element exclusion zone — nothing may enter this zone. The title "RITUAL TESTNET ARC" must sit at the bottom of the cover, entirely within the safe zone, with its bottom edge at least 8% from the bottom of the image. Side Japanese text must have at least 5% clearance from the left and right edges. Corner stickers must have at least 5% clearance from the bottom and side edges. Use a centered full-cover composition, not an extreme close-up. The artwork should feel like a complete manga cover fully contained inside a square frame with clear breathing room on every side.
 `;
 
 type SourceImageInput = {
