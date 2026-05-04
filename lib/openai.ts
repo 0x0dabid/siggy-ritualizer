@@ -20,7 +20,7 @@ Image B is the black cat character reference. Use Image B as the main base for t
 
 Also preserve the logo on the cat’s forehead from Image B. The forehead logo must remain accurate, clean, centered, and clearly recognizable. Do not redesign it loosely. Preserve the overall geometric structure and proportions of the logo so it looks faithful to the reference. Render it neatly in a clean light gray or white tone so it stands out clearly on the black fur.
 
-Create a portrait/bust-style composition, framed around the mid-belly or waist level. The cat should face forward, centered in frame, with the head taking up roughly the top 60% of the composition. Do not place the head, ears, hat, paws, orb, title, or side text at the exact image edge.
+Create a full manga cover composition. The cat should be the central focal point, positioned in the middle of the frame, with the full body visible from head to paws. Leave generous space at the top for the title, space on the sides for Japanese text, and space at the bottom for stickers and publisher elements. Do not place the head, ears, hat, paws, orb, title, or side text at the exact image edge.
 
 Transform the visual style elements from Image A into the cat design from Image B:
 - The cat is wearing [CLOTHING FROM IMAGE A BUT ADAPTED INTO THIS BLACK CAT STYLE]
@@ -137,7 +137,7 @@ Final safety check before rendering: all text, ears, hat, paws, orb, and the for
     image: imageFiles,
     prompt,
     size: "1024x1024",
-    quality: "medium"
+    quality: "high"
   });
 
   const b64 = response.data?.[0]?.b64_json;
