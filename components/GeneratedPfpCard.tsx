@@ -21,7 +21,7 @@ export function GeneratedPfpCard({ imageDataUrl, disabled, children }: Generated
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <button
-            className="ritual-button-outline min-h-14 bg-white/90 text-black hover:bg-white"
+            className="ritual-button min-h-14"
             disabled={disabled}
             type="button"
             onClick={() => downloadDataUrl(imageDataUrl, "siggy-ritualizer.png")}
