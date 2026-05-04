@@ -181,24 +181,26 @@ export function MintPanel({ imageDataUrl }: MintPanelProps) {
   }
 
   return (
-    <div>
+    <div className="contents">
       <button className="ritual-button min-h-14 w-full" disabled={busy} type="button" onClick={handleMint}>
         {busy ? <Loader2 className="size-4 animate-spin" /> : <Gem className="size-4" />}
         {label}
       </button>
 
-      <p className="mt-3 text-center text-xs text-white/55">
-        Need gas?{" "}
-        <a className="font-semibold text-ritual-bright underline" href="https://faucet.ritualfoundation.org" target="_blank" rel="noreferrer">
-          Ritual faucet
-        </a>
-      </p>
+      <div className="sm:col-span-2">
+        <p className="text-center text-xs text-white/55">
+          Need gas?{" "}
+          <a className="font-semibold text-ritual-bright underline" href="https://faucet.ritualfoundation.org" target="_blank" rel="noreferrer">
+            Ritual faucet
+          </a>
+        </p>
 
-      {error && (
-        <div className="mt-3 rounded-lg border border-red-300/30 bg-red-950/70 p-3 text-sm font-medium text-red-100">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="mx-auto mt-3 max-w-md rounded-lg border border-red-300/30 bg-red-950/70 p-3 text-sm font-medium text-red-100">
+            {error}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
