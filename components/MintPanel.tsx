@@ -182,7 +182,7 @@ export function MintPanel({ imageDataUrl }: MintPanelProps) {
 
   return (
     <div className="contents">
-      <button className="ritual-button min-h-14 w-full" disabled={busy} type="button" onClick={handleMint}>
+      <button className="ritual-button min-h-12 w-full sm:min-h-14" disabled={busy} type="button" onClick={handleMint}>
         {busy ? <Loader2 className="size-4 animate-spin" /> : <Gem className="size-4" />}
         {label}
       </button>

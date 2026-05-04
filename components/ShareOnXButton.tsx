@@ -16,7 +16,7 @@ TRY IT HERE https://siggy-ritualizer.vercel.app/
   const href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 
   return (
-    <a className="ritual-button w-full" href={href} rel="noreferrer" target="_blank">
+    <a className="ritual-button min-h-12 w-full sm:min-h-14" href={href} rel="noreferrer" target="_blank">
       <Share2 className="size-4" />
       Share on X
     </a>
