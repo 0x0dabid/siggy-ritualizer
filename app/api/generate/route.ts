@@ -3,6 +3,7 @@ import { ACCEPTED_IMAGE_TYPES, MAX_UPLOAD_BYTES } from "@/lib/utils";
 import { generateSiggyRitualizerFromSource } from "@/lib/openai";
 
 export const runtime = "nodejs";
+export const maxDuration = 300;
 
 export async function POST(request: Request) {
   try {
