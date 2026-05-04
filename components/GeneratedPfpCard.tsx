@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Download, Sparkles } from "lucide-react";
+import { Download } from "lucide-react";
 import { downloadDataUrl } from "@/lib/utils";
 
 type GeneratedPfpCardProps = {
@@ -13,13 +13,9 @@ type GeneratedPfpCardProps = {
 export function GeneratedPfpCard({ imageDataUrl, disabled, children }: GeneratedPfpCardProps) {
   return (
     <section className="fixed inset-0 z-50 flex items-center justify-center bg-[#07140d]/78 px-4 py-6 backdrop-blur-md">
-      <div className="siggy-panel max-h-[calc(100vh-3rem)] w-full max-w-[35rem] overflow-y-auto rounded-[1.35rem] p-4 shadow-[0_0_80px_rgba(25,209,132,0.35)] sm:p-6">
-        <div className="relative aspect-square overflow-hidden rounded-xl border border-emerald-100/30 bg-black">
-          <Image src={imageDataUrl} alt="Generated Siggy Ritualizer PFP" fill className="object-cover" priority unoptimized />
-          <div className="absolute left-3 top-3 inline-flex items-center gap-2 border border-ritual-bright/40 bg-black/70 px-3 py-2 text-xs font-semibold text-ritual-bright backdrop-blur">
-            <Sparkles className="size-4" />
-            AI Output
-          </div>
+      <div className="siggy-panel max-h-[calc(100vh-2rem)] w-full max-w-[38rem] overflow-y-auto rounded-[1.35rem] p-3 shadow-[0_0_80px_rgba(25,209,132,0.35)] sm:p-4">
+        <div className="relative aspect-square overflow-hidden rounded-xl">
+          <Image src={imageDataUrl} alt="Generated Siggy Ritualizer PFP" fill className="object-contain" priority unoptimized />
         </div>
 
         <div className="mt-5 text-center">
@@ -29,7 +25,7 @@ export function GeneratedPfpCard({ imageDataUrl, disabled, children }: Generated
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <button
-            className="ritual-button-outline min-h-14"
+            className="ritual-button-outline min-h-14 bg-white/10 text-white hover:bg-white/15"
             disabled={disabled}
             type="button"
             onClick={() => downloadDataUrl(imageDataUrl, "siggy-ritualizer.png")}
