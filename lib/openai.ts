@@ -38,6 +38,8 @@ Turn the final image into a premium manga cover illustration.
 Add a large, bold manga-style title that clearly says:
 “RITUAL TESTNET ARC”
 
+Place the title so that the TOP of the tallest letter starts no closer than 8% from the top edge of the image. There must be visible empty space above the title. Do not let the title bleed into or past the top edge.
+
 Add Japanese text integrated into the cover design, including:
 “リチュアル・テストネット・アーク”
 
@@ -80,7 +82,7 @@ Background:
 Use [BACKGROUND FROM IMAGE A] adapted into the same manga cover style. Reinterpret the background with dramatic manga aesthetics such as halftone textures, smoky energy, magical effects, speed lines, glowing particles, stylized environmental details, or a mystical atmosphere depending on Image A. Keep it visually rich, but make sure the black cat remains the clear focal point.
 
 IMPORTANT COMPOSITION RULE:
-The final image must be a complete 1:1 square composition with safe margins. Keep all important elements fully inside the frame. Do not crop or cut off the character, ears, hat, paws, glowing orb, forehead logo, Japanese text, or title text. Leave at least 10 to 15 percent padding on all four sides — top, bottom, left, and right. The title "RITUAL TESTNET ARC" sits at the top of the cover and must be fully visible; it must not touch or bleed past the top edge. Side Japanese text must not touch the left or right edges. Corner stickers and publisher blocks must not touch the bottom or side edges. Use a centered full-cover composition, not an extreme close-up. The artwork should feel like a complete manga cover fully contained inside a square frame with clear breathing room on every side.
+The final image must be a complete 1:1 square composition with safe margins. Keep all important elements fully inside the frame. No element may touch or bleed past any edge. Treat the outer 8% on every side as a hard no-text, no-element exclusion zone — nothing may enter this zone. The title "RITUAL TESTNET ARC" must sit entirely within the safe zone, with its top edge at least 8% from the top of the image. Side Japanese text must have at least 5% clearance from the left and right edges. Corner stickers must have at least 5% clearance from the bottom and side edges. Use a centered full-cover composition, not an extreme close-up. The artwork should feel like a complete manga cover fully contained inside a square frame with clear breathing room on every side.
 `;
 
 type SourceImageInput = {
