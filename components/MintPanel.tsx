@@ -29,9 +29,10 @@ type MintStatus =
 
 type MintPanelProps = {
   imageDataUrl: string;
+  sourceImageDataUrl: string;
 };
 
-export function MintPanel({ imageDataUrl }: MintPanelProps) {
+export function MintPanel({ imageDataUrl, sourceImageDataUrl }: MintPanelProps) {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { connectors, connectAsync } = useConnect();
@@ -174,7 +175,7 @@ export function MintPanel({ imageDataUrl }: MintPanelProps) {
           </a>
         )}
         <div className="mt-4">
-          <ShareOnXButton txUrl={txUrl} />
+          <ShareOnXButton sourceImageDataUrl={sourceImageDataUrl} generatedImageDataUrl={imageDataUrl} txUrl={txUrl} />
         </div>
       </div>
     );
