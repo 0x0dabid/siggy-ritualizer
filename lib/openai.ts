@@ -4,7 +4,7 @@ import OpenAI, { toFile } from "openai";
 
 export const THEME_REFERENCE_IMAGE_PATH = `/reference/theme.png`;
 export const BLACK_CAT_REFERENCE_IMAGE_PATH = `black cat.png`;
-export const OPENAI_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1.5";
+export const OPENAI_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-2";
 
 const GENERATED_STYLE_PROMPT = `
 Follow the Image A to Image B mapping strictly. The final character must clearly remain
