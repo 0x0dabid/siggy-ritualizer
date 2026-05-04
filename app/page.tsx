@@ -129,7 +129,7 @@ export default function HomePage() {
 
             {generatedImage && !isGenerating && (
               <GeneratedPfpCard imageDataUrl={generatedImage} disabled={isGenerating}>
-                <MintPanel imageDataUrl={generatedImage} sourceImageDataUrl={previewUrl ?? generatedImage} />
+                <MintPanel imageDataUrl={generatedImage} />
               </GeneratedPfpCard>
             )}
             </div>
