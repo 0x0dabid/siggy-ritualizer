@@ -80,7 +80,7 @@ Background:
 Use [BACKGROUND FROM IMAGE A] adapted into the same manga cover style. Reinterpret the background with dramatic manga aesthetics such as halftone textures, smoky energy, magical effects, speed lines, glowing particles, stylized environmental details, or a mystical atmosphere depending on Image A. Keep it visually rich, but make sure the black cat remains the clear focal point.
 
 IMPORTANT COMPOSITION RULE:
-The final image must be a complete 1:1 square composition with safe margins. Keep all important elements fully inside the frame. Do not crop or cut off the character, ears, hat, paws, glowing orb, forehead logo, Japanese text, or title text. Leave about 10 to 15 percent padding on all sides. The title must be fully visible and should not touch the bottom edge. Use a centered full-cover composition, not an extreme close-up. The artwork should feel like a complete manga cover contained inside a square frame.
+The final image must be a complete 1:1 square composition with safe margins. Keep all important elements fully inside the frame. Do not crop or cut off the character, ears, hat, paws, glowing orb, forehead logo, Japanese text, or title text. Leave at least 10 to 15 percent padding on all four sides — top, bottom, left, and right. The title "RITUAL TESTNET ARC" sits at the top of the cover and must be fully visible; it must not touch or bleed past the top edge. Side Japanese text must not touch the left or right edges. Corner stickers and publisher blocks must not touch the bottom or side edges. Use a centered full-cover composition, not an extreme close-up. The artwork should feel like a complete manga cover fully contained inside a square frame with clear breathing room on every side.
 `;
 
 type SourceImageInput = {
@@ -129,7 +129,7 @@ Source: ${input.sourceLabel} (${input.sourceImageUrl}).
 Treat the first provided image as Image A. Treat the second provided image as Image B from ${BLACK_CAT_REFERENCE_IMAGE_PATH}.
 ${GENERATED_STYLE_PROMPT}
 
-Final safety check before rendering: all text, ears, hat, paws, orb, and the forehead logo must be fully visible inside the square with clear margins.
+Final safety check before rendering: the title at the top must not be cropped — pull it down if needed. All text, ears, hat, paws, orb, stickers, and the forehead logo must be fully visible inside the square with clear margins on every side.
 `.trim();
 
   const response = await openai.images.edit({
