@@ -19,7 +19,7 @@ export default function HomePage() {
     setError(null);
 
     if (!file) {
-      setError("Upload an image before generating.");
+      setError("Import an X profile picture or upload an image before generating.");
       return;
     }
 
@@ -76,7 +76,7 @@ export default function HomePage() {
               <span className="h-px flex-1 bg-black/70" />
             </div>
             <p className="mt-5 max-w-xl text-xl leading-8 text-black/72">
-              Upload your image. Let Siggy ritualize it into a mystical AI avatar, then mint it on Ritual Testnet.
+              Import your X PFP or upload an image. Let Siggy ritualize it into a mystical AI avatar, then mint it on Ritual Testnet.
             </p>
 
             <div className="mt-10 flex max-w-[42rem] overflow-hidden rounded-xl border border-black/10 bg-white/45 shadow-card backdrop-blur">
