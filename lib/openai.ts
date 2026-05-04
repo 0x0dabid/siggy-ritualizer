@@ -20,7 +20,7 @@ Image B is the black cat character reference. Use Image B as the main base for t
 
 Also preserve the logo on the cat’s forehead from Image B. The forehead logo must remain accurate, clean, centered, and clearly recognizable. Do not redesign it loosely. Preserve the overall geometric structure and proportions of the logo so it looks faithful to the reference. Render it neatly in a clean light gray or white tone so it stands out clearly on the black fur.
 
-Create a portrait/bust-style composition, cropped around the mid-belly or waist level. The cat should face forward, centered in frame, with the head taking up roughly the top 60% of the composition.
+Create a portrait/bust-style composition, framed around the mid-belly or waist level. The cat should face forward, centered in frame, with the head taking up roughly the top 60% of the composition. Do not place the head, ears, hat, paws, orb, title, or side text at the exact image edge.
 
 Transform the visual style elements from Image A into the cat design from Image B:
 - The cat is wearing [CLOTHING FROM IMAGE A BUT ADAPTED INTO THIS BLACK CAT STYLE]
@@ -78,6 +78,9 @@ square composition
 
 Background:
 Use [BACKGROUND FROM IMAGE A] adapted into the same manga cover style. Reinterpret the background with dramatic manga aesthetics such as halftone textures, smoky energy, magical effects, speed lines, glowing particles, stylized environmental details, or a mystical atmosphere depending on Image A. Keep it visually rich, but make sure the black cat remains the clear focal point.
+
+IMPORTANT COMPOSITION RULE:
+The final image must be a complete 1:1 square composition with safe margins. Keep all important elements fully inside the frame. Do not crop or cut off the character, ears, hat, paws, glowing orb, forehead logo, Japanese text, or title text. Leave about 10 to 15 percent padding on all sides. The title must be fully visible and should not touch the bottom edge. Use a centered full-cover composition, not an extreme close-up. The artwork should feel like a complete manga cover contained inside a square frame.
 `;
 
 type SourceImageInput = {
@@ -125,6 +128,8 @@ ${BACKEND_IMAGE_PROMPT}
 Source: ${input.sourceLabel} (${input.sourceImageUrl}).
 Treat the first provided image as Image A. Treat the second provided image as Image B from ${BLACK_CAT_REFERENCE_IMAGE_PATH}.
 ${GENERATED_STYLE_PROMPT}
+
+Final safety check before rendering: all text, ears, hat, paws, orb, and the forehead logo must be fully visible inside the square with clear margins.
 `.trim();
 
   const response = await openai.images.edit({
