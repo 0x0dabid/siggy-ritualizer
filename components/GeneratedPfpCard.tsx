@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Download } from "lucide-react";
 import { downloadDataUrl } from "@/lib/utils";
 
@@ -13,10 +12,12 @@ type GeneratedPfpCardProps = {
 export function GeneratedPfpCard({ imageDataUrl, disabled, children }: GeneratedPfpCardProps) {
   return (
     <section className="fixed inset-0 z-50 flex items-center justify-center bg-[#07140d]/78 px-4 py-6 backdrop-blur-md">
-      <div className="max-h-[calc(100vh-2rem)] w-full max-w-[38rem] overflow-y-auto">
-        <div className="relative aspect-square overflow-hidden rounded-xl shadow-[0_0_80px_rgba(25,209,132,0.35)]">
-          <Image src={imageDataUrl} alt="Generated Siggy Ritualizer PFP" fill className="object-contain" priority unoptimized />
-        </div>
+      <div className="max-h-[calc(100vh-2rem)] w-full max-w-[42rem] overflow-y-auto px-1">
+        <img
+          src={imageDataUrl}
+          alt="Generated Siggy Ritualizer PFP"
+          className="mx-auto block h-auto max-h-[calc(100vh-7.5rem)] w-full object-contain drop-shadow-[0_0_80px_rgba(25,209,132,0.35)]"
+        />
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <button
