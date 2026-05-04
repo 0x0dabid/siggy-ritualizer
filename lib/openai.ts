@@ -139,7 +139,7 @@ Final safety check before rendering: the title at the top must not be cropped â€
     image: imageFiles,
     prompt,
     size: "1024x1024",
-    quality: "high"
+    quality: "medium"
   });
 
   const b64 = response.data?.[0]?.b64_json;
