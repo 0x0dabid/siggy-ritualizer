@@ -27,7 +27,7 @@ Fill in:
 
 ```bash
 OPENAI_API_KEY=
-OPENAI_IMAGE_MODEL=gpt-image-2
+OPENAI_IMAGE_MODEL=gpt-image-1.5
 PINATA_JWT=
 RITUAL_RPC_URL=https://rpc.ritualfoundation.org
 PRIVATE_KEY=
@@ -41,7 +41,7 @@ The OpenAI key, image model, and Pinata JWT are only used server-side. Do not pr
 The backend prompt lives in `lib/openai.ts`. Image A is the uploaded image. Image B is loaded from the root-level `black cat.png` file, and the prompt explicitly preserves the forehead logo from that reference.
 
 ```ts
-export const OPENAI_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-2";
+export const OPENAI_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1.5";
 export const BACKEND_IMAGE_PROMPT = `...`;
 export const THEME_REFERENCE_IMAGE_PATH = `/reference/theme.png`;
 export const BLACK_CAT_REFERENCE_IMAGE_PATH = `black cat.png`;
@@ -95,7 +95,7 @@ The intended flow is:
 2. Import it in Vercel.
 3. Add environment variables:
    - `OPENAI_API_KEY`
-   - `OPENAI_IMAGE_MODEL=gpt-image-2`
+   - `OPENAI_IMAGE_MODEL=gpt-image-1.5`
    - `PINATA_JWT`
    - `NEXT_PUBLIC_RITUAL_CHAIN_ID=1979`
    - `NEXT_PUBLIC_RITUAL_RPC_URL=https://rpc.ritualfoundation.org`
