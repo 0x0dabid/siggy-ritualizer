@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, Gem, Loader2 } from "lucide-react";
+import { ExternalLink, Gem, Loader2, PartyPopper } from "lucide-react";
 import { useMemo, useState } from "react";
 import type { Hex } from "viem";
 import { decodeEventLog } from "viem";
@@ -158,41 +158,44 @@ export function MintPanel({ imageDataUrl }: MintPanelProps) {
     }
   }
 
+  if (status === "success") {
+    return (
+      <div className="sm:col-span-2 rounded-xl border border-ritual-bright/40 bg-ritual-green/15 p-4 text-center shadow-emerald-glow">
+        <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-ritual-green text-white">
+          <PartyPopper className="size-6" />
+        </div>
+        <p className="text-xl font-bold text-white">
+          Congrats{tokenId ? `, Siggy #${tokenId} is minted.` : ", your Siggy is minted."}
+        </p>
+        {txUrl && (
+          <a className="mt-3 inline-flex items-center justify-center gap-2 text-sm font-semibold text-ritual-bright underline" href={txUrl} target="_blank" rel="noreferrer">
+            View transaction
+            <ExternalLink className="size-4" />
+          </a>
+        )}
+        <div className="mt-4">
+          <ShareOnXButton txUrl={txUrl} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="mt-5 border-t border-black/10 pt-5">
-      <button className="ritual-button w-full" disabled={busy} type="button" onClick={handleMint}>
+    <div>
+      <button className="ritual-button min-h-14 w-full" disabled={busy} type="button" onClick={handleMint}>
         {busy ? <Loader2 className="size-4 animate-spin" /> : <Gem className="size-4" />}
         {label}
       </button>
 
-      <div className="mt-3 space-y-2 text-sm text-black/65">
-        <p>Ritual Testnet only. No real value.</p>
-        <p>
-          Need gas? Use the{" "}
-          <a className="font-semibold text-ritual-green underline" href="https://faucet.ritualfoundation.org" target="_blank" rel="noreferrer">
-            Ritual faucet
-          </a>
-          .
-        </p>
-      </div>
-
-      {status === "success" && (
-        <div className="mt-4 space-y-3 border border-ritual-green/30 bg-ritual-green/10 p-4">
-          <p className="font-semibold text-ritual-green">
-            Success{tokenId ? `: Siggy Ritualizer #${tokenId}` : ""}.
-          </p>
-          {txUrl && (
-            <a className="inline-flex items-center gap-2 text-sm font-semibold text-black underline" href={txUrl} target="_blank" rel="noreferrer">
-              View transaction
-              <ExternalLink className="size-4" />
-            </a>
-          )}
-          <ShareOnXButton txUrl={txUrl} />
-        </div>
-      )}
+      <p className="mt-3 text-center text-xs text-white/55">
+        Need gas?{" "}
+        <a className="font-semibold text-ritual-bright underline" href="https://faucet.ritualfoundation.org" target="_blank" rel="noreferrer">
+          Ritual faucet
+        </a>
+      </p>
 
       {error && (
-        <div className="mt-4 border border-red-700/25 bg-red-50 p-4 text-sm font-medium text-red-800">
+        <div className="mt-3 rounded-lg border border-red-300/30 bg-red-950/70 p-3 text-sm font-medium text-red-100">
           {error}
         </div>
       )}

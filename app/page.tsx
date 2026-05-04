@@ -33,7 +33,7 @@ export default function HomePage() {
       });
       const data = (await response.json()) as { imageDataUrl?: string; error?: string };
       if (!response.ok || !data.imageDataUrl) {
-        throw new Error(data.error || "Generation failed. Try a different handle.");
+        throw new Error(data.error || "Generation failed. Try a different image.");
       }
       setGeneratedImage(data.imageDataUrl);
     } catch (err) {
@@ -117,14 +117,18 @@ export default function HomePage() {
                   <Sparkles className="size-8" />
                   Generate Siggy
                 </button>
-                {error && <p className="sr-only" role="alert">{error}</p>}
+                {error && (
+                  <div className="rounded-xl border border-red-300/40 bg-red-950/70 px-4 py-3 text-sm font-semibold text-red-100 shadow-card" role="alert">
+                    {error}
+                  </div>
+                )}
               </>
             )}
 
             {isGenerating && <RitualLoader />}
 
             {generatedImage && !isGenerating && (
-              <GeneratedPfpCard imageDataUrl={generatedImage} disabled={isGenerating} onRegenerate={generate}>
+              <GeneratedPfpCard imageDataUrl={generatedImage} disabled={isGenerating}>
                 <MintPanel imageDataUrl={generatedImage} />
               </GeneratedPfpCard>
             )}

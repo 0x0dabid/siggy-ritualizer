@@ -9,7 +9,7 @@
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "compile": "hardhat compile",
-    "deploy:ritual": "hardhat run scripts/deploy.ts --network ritual"
+    "deploy:ritual": "cross-env TS_NODE_PROJECT=tsconfig.hardhat.json hardhat run scripts/deploy.ts --network ritual"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.9",
@@ -28,6 +28,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.22",
+    "cross-env": "^7.0.3",
     "dotenv": "^17.2.3",
     "hardhat": "^2.27.1",
     "postcss": "^8.5.6",
