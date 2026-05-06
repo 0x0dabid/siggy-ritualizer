@@ -2,9 +2,9 @@
 
 import { Images, Loader2, X } from "lucide-react";
 import { useState } from "react";
-import { decodeEventLog } from "viem";
+import { parseAbiItem } from "viem";
 import { usePublicClient } from "wagmi";
-import { hasContractAddress, NFT_CONTRACT_ADDRESS, ritualizedPfpAbi } from "@/lib/contract";
+import { hasContractAddress, NFT_CONTRACT_ADDRESS } from "@/lib/contract";
 
 type NFTItem = {
   tokenId: string;
@@ -37,37 +37,30 @@ export function NFTGallery() {
     setError(null);
     try {
       const CHUNK = 99_999n;
-      const latestBlock = await publicClient.getBlockNumber();
+      const event = parseAbiItem(
+        "event PfpMinted(address indexed minter, uint256 indexed tokenId, string tokenURI)"
+      );
 
-      const rawLogs: Awaited<ReturnType<typeof publicClient.getLogs>> = [];
+      type PfpLog = { args: { minter?: `0x${string}`; tokenId?: bigint; tokenURI?: string } };
+      const latestBlock = await publicClient.getBlockNumber();
+      const allLogs: PfpLog[] = [];
+
       for (let from = 0n; from <= latestBlock; from += CHUNK + 1n) {
         const to = from + CHUNK > latestBlock ? latestBlock : from + CHUNK;
         const chunk = await publicClient.getLogs({
           address: NFT_CONTRACT_ADDRESS,
+          event,
           fromBlock: from,
           toBlock: to
         });
-        rawLogs.push(...chunk);
+        allLogs.push(...(chunk as PfpLog[]));
       }
 
       const items = await Promise.all(
-        rawLogs.map(async (log) => {
-          let tokenId = "?";
-          let minter = "";
-          let tokenUri = "";
-          try {
-            const decoded = decodeEventLog({
-              abi: ritualizedPfpAbi,
-              data: log.data,
-              topics: log.topics,
-              eventName: "PfpMinted"
-            });
-            tokenId = decoded.args.tokenId?.toString() ?? "?";
-            minter = (decoded.args.minter as string) ?? "";
-            tokenUri = (decoded.args.tokenURI as string) ?? "";
-          } catch {
-            return null;
-          }
+        allLogs.map(async (log) => {
+          const tokenId = log.args.tokenId?.toString() ?? "?";
+          const minter = log.args.minter ?? "";
+          const tokenUri = log.args.tokenURI ?? "";
           try {
             const res = await fetch(ipfsToHttp(tokenUri));
             const meta = (await res.json()) as { image?: string; name?: string };
@@ -83,7 +76,7 @@ export function NFTGallery() {
         })
       );
 
-      setNfts(items.filter((item): item is NFTItem => item !== null).reverse());
+      setNfts(items.reverse());
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load gallery.");
     } finally {
