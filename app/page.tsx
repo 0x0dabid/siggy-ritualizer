@@ -5,6 +5,7 @@ import { useState } from "react";
 import { GeneratedPfpCard } from "@/components/GeneratedPfpCard";
 import { ImageUploadCard } from "@/components/ImageUploadCard";
 import { MintPanel } from "@/components/MintPanel";
+import { NFTGallery } from "@/components/NFTGallery";
 import { RitualLoader } from "@/components/RitualLoader";
 import { WalletButton } from "@/components/WalletButton";
 
@@ -56,7 +57,10 @@ export default function HomePage() {
             <img src="/background-logo.png" alt="" className="size-9 object-contain" />
             Ritual Testnet
           </div>
-          <WalletButton />
+          <div className="flex items-center gap-3">
+            <NFTGallery />
+            <WalletButton />
+          </div>
         </header>
 
         <section className="grid flex-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(28rem,34rem)] xl:gap-8">
