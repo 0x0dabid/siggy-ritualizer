@@ -2,9 +2,14 @@
 
 import { Images, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { parseAbiItem } from "viem";
-import { usePublicClient } from "wagmi";
+import { createPublicClient, http, parseAbiItem } from "viem";
+import { ritualChain, RITUAL_RPC_URL } from "@/lib/chains";
 import { hasContractAddress, NFT_CONTRACT_ADDRESS } from "@/lib/contract";
+
+const client = createPublicClient({
+  chain: ritualChain,
+  transport: http(RITUAL_RPC_URL)
+});
 
 type NFTItem = {
   tokenId: string;
@@ -24,10 +29,9 @@ export function NFTGallery() {
   const [nfts, setNfts] = useState<NFTItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const publicClient = usePublicClient();
 
   useEffect(() => {
-    if (!publicClient || !hasContractAddress()) {
+    if (!hasContractAddress()) {
       setLoading(false);
       return;
     }
@@ -40,12 +44,12 @@ export function NFTGallery() {
 
     (async () => {
       try {
-        const latestBlock = await publicClient.getBlockNumber();
+        const latestBlock = await client.getBlockNumber();
         const allLogs: PfpLog[] = [];
 
         for (let from = 0n; from <= latestBlock; from += CHUNK + 1n) {
           const to = from + CHUNK > latestBlock ? latestBlock : from + CHUNK;
-          const chunk = await publicClient.getLogs({
+          const chunk = await client.getLogs({
             address: NFT_CONTRACT_ADDRESS,
             event,
             fromBlock: from,
@@ -76,12 +80,12 @@ export function NFTGallery() {
 
         setNfts(items.reverse());
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load gallery.");
+        setError(err instanceof Error ? err.message : "Failed to load collection.");
       } finally {
         setLoading(false);
       }
     })();
-  }, [publicClient]);
+  }, []);
 
   return (
     <section id="gallery" className="relative w-full" style={{ background: "linear-gradient(180deg, rgba(14,60,38,0.0) 0%, rgba(6,17,13,1) 6%)" }}>
@@ -140,7 +144,6 @@ export function NFTGallery() {
                 key={nft.tokenId}
                 className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/4 transition-all duration-200 hover:border-ritual-bright/40 hover:scale-[1.02]"
               >
-                {/* Image */}
                 <div className="relative aspect-square w-full overflow-hidden bg-ritual-green/10">
                   {nft.imageUrl ? (
                     <img
@@ -153,17 +156,13 @@ export function NFTGallery() {
                       <Images className="size-8 text-white/20" />
                     </div>
                   )}
-                  {/* Token ID badge */}
                   <span className="absolute left-2.5 top-2.5 rounded-lg bg-black/60 px-2 py-0.5 font-mono text-xs font-bold text-white backdrop-blur-sm">
                     #{nft.tokenId}
                   </span>
-                  {/* Minted badge */}
                   <span className="absolute right-2.5 top-2.5 rounded-lg bg-ritual-green/80 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
                     Minted
                   </span>
                 </div>
-
-                {/* Footer */}
                 <div className="px-3 py-2.5">
                   <p className="truncate text-sm font-semibold text-white">{nft.name}</p>
                   <p className="mt-0.5 font-mono text-[10px] text-white/40">
