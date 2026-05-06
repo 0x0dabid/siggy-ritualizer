@@ -19,6 +19,20 @@ export const ritualizedPfpAbi = [
     outputs: [{ type: "uint256" }]
   },
   {
+    type: "function",
+    name: "tokenURI",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "string" }]
+  },
+  {
+    type: "function",
+    name: "ownerOf",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "address" }]
+  },
+  {
     type: "event",
     name: "PfpMinted",
     inputs: [

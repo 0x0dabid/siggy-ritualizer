@@ -2,9 +2,9 @@
 
 import { Images, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { createPublicClient, http, parseAbiItem } from "viem";
+import { createPublicClient, http } from "viem";
 import { ritualChain, RITUAL_RPC_URL } from "@/lib/chains";
-import { hasContractAddress, NFT_CONTRACT_ADDRESS } from "@/lib/contract";
+import { hasContractAddress, NFT_CONTRACT_ADDRESS, ritualizedPfpAbi } from "@/lib/contract";
 
 const client = createPublicClient({
   chain: ritualChain,
@@ -12,8 +12,8 @@ const client = createPublicClient({
 });
 
 type NFTItem = {
-  tokenId: string;
-  minter: string;
+  tokenId: number;
+  owner: string;
   imageUrl: string;
   name: string;
 };
@@ -36,44 +36,63 @@ export function NFTGallery() {
       return;
     }
 
-    const CHUNK = 99_999n;
-    const event = parseAbiItem(
-      "event PfpMinted(address indexed minter, uint256 indexed tokenId, string tokenURI)"
-    );
-    type PfpLog = { args: { minter?: `0x${string}`; tokenId?: bigint; tokenURI?: string } };
-
     (async () => {
       try {
-        const latestBlock = await client.getBlockNumber();
-        const allLogs: PfpLog[] = [];
+        // 1. Get total minted
+        const nextId = await client.readContract({
+          address: NFT_CONTRACT_ADDRESS,
+          abi: ritualizedPfpAbi,
+          functionName: "nextTokenId"
+        });
+        const total = Number(nextId) - 1;
 
-        for (let from = 0n; from <= latestBlock; from += CHUNK + 1n) {
-          const to = from + CHUNK > latestBlock ? latestBlock : from + CHUNK;
-          const chunk = await client.getLogs({
-            address: NFT_CONTRACT_ADDRESS,
-            event,
-            fromBlock: from,
-            toBlock: to
-          });
-          allLogs.push(...(chunk as PfpLog[]));
+        if (total <= 0) {
+          setNfts([]);
+          setLoading(false);
+          return;
         }
 
+        const ids = Array.from({ length: total }, (_, i) => i + 1);
+
+        // 2. Batch fetch tokenURI + ownerOf for all tokens
+        const [uriResults, ownerResults] = await Promise.all([
+          client.multicall({
+            contracts: ids.map((id) => ({
+              address: NFT_CONTRACT_ADDRESS,
+              abi: ritualizedPfpAbi,
+              functionName: "tokenURI" as const,
+              args: [BigInt(id)] as const
+            }))
+          }),
+          client.multicall({
+            contracts: ids.map((id) => ({
+              address: NFT_CONTRACT_ADDRESS,
+              abi: ritualizedPfpAbi,
+              functionName: "ownerOf" as const,
+              args: [BigInt(id)] as const
+            }))
+          })
+        ]);
+
+        // 3. Fetch IPFS metadata for each token
         const items = await Promise.all(
-          allLogs.map(async (log) => {
-            const tokenId = log.args.tokenId?.toString() ?? "?";
-            const minter = log.args.minter ?? "";
-            const tokenUri = log.args.tokenURI ?? "";
+          ids.map(async (id, i) => {
+            const tokenUri = uriResults[i].status === "success" ? String(uriResults[i].result) : "";
+            const owner = ownerResults[i].status === "success" ? String(ownerResults[i].result) : "";
+
+            if (!tokenUri) return { tokenId: id, owner, imageUrl: "", name: `Siggy #${id}` };
+
             try {
               const res = await fetch(ipfsToHttp(tokenUri));
               const meta = (await res.json()) as { image?: string; name?: string };
               return {
-                tokenId,
-                minter,
+                tokenId: id,
+                owner,
                 imageUrl: meta.image ? ipfsToHttp(meta.image) : "",
-                name: meta.name ?? `Siggy #${tokenId}`
+                name: meta.name ?? `Siggy #${id}`
               };
             } catch {
-              return { tokenId, minter, imageUrl: "", name: `Siggy #${tokenId}` };
+              return { tokenId: id, owner, imageUrl: "", name: `Siggy #${id}` };
             }
           })
         );
@@ -98,22 +117,18 @@ export function NFTGallery() {
       />
 
       <div className="relative mx-auto max-w-[92rem] px-5 py-14 sm:px-8 lg:px-11">
-        {/* Section header */}
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex size-11 items-center justify-center rounded-xl border border-ritual-bright/30 bg-ritual-green/20">
-              <Images className="size-5 text-ritual-bright" />
-            </div>
-            <div>
-              <h2 className="font-display text-3xl text-white sm:text-4xl">Collection</h2>
-              <p className="mt-0.5 font-mono text-xs uppercase tracking-widest text-ritual-bright/70">
-                {loading ? "Loading…" : `${nfts.length} Siggy${nfts.length !== 1 ? "s" : ""} minted`}
-              </p>
-            </div>
+        <div className="mb-8 flex items-center gap-4">
+          <div className="flex size-11 items-center justify-center rounded-xl border border-ritual-bright/30 bg-ritual-green/20">
+            <Images className="size-5 text-ritual-bright" />
+          </div>
+          <div>
+            <h2 className="font-display text-3xl text-white sm:text-4xl">Collection</h2>
+            <p className="mt-0.5 font-mono text-xs uppercase tracking-widest text-ritual-bright/70">
+              {loading ? "Loading…" : `${nfts.length} Siggy${nfts.length !== 1 ? "s" : ""} minted`}
+            </p>
           </div>
         </div>
 
-        {/* Loading */}
         {loading && (
           <div className="flex h-52 items-center justify-center gap-3 text-ritual-bright">
             <Loader2 className="size-6 animate-spin" />
@@ -121,14 +136,12 @@ export function NFTGallery() {
           </div>
         )}
 
-        {/* Error */}
         {!loading && error && (
           <div className="mx-auto max-w-md rounded-xl border border-red-300/30 bg-red-950/70 p-4 text-center text-sm font-medium text-red-100">
             {error}
           </div>
         )}
 
-        {/* Empty */}
         {!loading && !error && nfts.length === 0 && (
           <div className="flex h-52 flex-col items-center justify-center gap-3 text-white/30">
             <Images className="size-12 opacity-40" />
@@ -136,7 +149,6 @@ export function NFTGallery() {
           </div>
         )}
 
-        {/* Grid */}
         {!loading && nfts.length > 0 && (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {nfts.map((nft) => (
@@ -166,7 +178,7 @@ export function NFTGallery() {
                 <div className="px-3 py-2.5">
                   <p className="truncate text-sm font-semibold text-white">{nft.name}</p>
                   <p className="mt-0.5 font-mono text-[10px] text-white/40">
-                    {nft.minter.slice(0, 6)}…{nft.minter.slice(-4)}
+                    {nft.owner ? `${nft.owner.slice(0, 6)}…${nft.owner.slice(-4)}` : ""}
                   </p>
                 </div>
               </div>
