@@ -18,27 +18,17 @@ type NFTItem = {
   name: string;
 };
 
-const GATEWAYS = [
-  "https://cloudflare-ipfs.com/ipfs/",
-  "https://gateway.pinata.cloud/ipfs/",
-  "https://ipfs.io/ipfs/"
-];
-
-function ipfsToHttp(uri: string, gateway = GATEWAYS[0]) {
-  if (uri.startsWith("ipfs://")) return `${gateway}${uri.slice(7)}`;
+function ipfsToHttp(uri: string) {
+  if (uri.startsWith("ipfs://")) return `https://ipfs.io/ipfs/${uri.slice(7)}`;
   return uri;
 }
 
 async function fetchIpfsMeta(uri: string): Promise<{ image?: string; name?: string }> {
-  for (const gateway of GATEWAYS) {
-    try {
-      const res = await fetch(ipfsToHttp(uri, gateway), {
-        signal: AbortSignal.timeout(8000)
-      });
-      if (res.ok) return (await res.json()) as { image?: string; name?: string };
-    } catch {
-      // try next gateway
-    }
+  try {
+    const res = await fetch(`/api/metadata?uri=${encodeURIComponent(uri)}`);
+    if (res.ok) return (await res.json()) as { image?: string; name?: string };
+  } catch {
+    // fall through
   }
   return {};
 }
