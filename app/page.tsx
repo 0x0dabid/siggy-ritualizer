@@ -47,7 +47,7 @@ export default function HomePage() {
   const hasResult = Boolean(generatedImage);
 
   return (
-    <main className="siggy-shell relative min-h-screen overflow-hidden px-5 py-7 sm:px-8 lg:px-11">
+    <main className="siggy-shell relative min-h-screen px-5 py-7 sm:px-8 lg:px-11">
       <div className="pointer-events-none absolute bottom-10 left-10 hidden h-px w-[26rem] bg-black/20 lg:block" />
       <div className="pointer-events-none absolute bottom-10 right-14 hidden h-px w-[18rem] bg-ritual-green/35 lg:block" />
 
@@ -58,7 +58,10 @@ export default function HomePage() {
             Ritual Testnet
           </div>
           <div className="flex items-center gap-3">
-            <NFTGallery />
+            <a href="#gallery" className="ritual-button-outline gap-2 px-4 text-sm">
+              <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              <span className="hidden sm:inline">Gallery</span>
+            </a>
             <WalletButton />
           </div>
         </header>
@@ -147,6 +150,8 @@ export default function HomePage() {
           </div>
         </footer>
       </div>
+
+      <NFTGallery />
     </main>
   );
 }
