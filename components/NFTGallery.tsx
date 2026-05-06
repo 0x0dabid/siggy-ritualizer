@@ -33,6 +33,43 @@ async function fetchIpfsMeta(uri: string): Promise<{ image?: string; name?: stri
   return {};
 }
 
+async function readTokenURI(id: number): Promise<string> {
+  try {
+    const uri = await client.readContract({
+      address: NFT_CONTRACT_ADDRESS,
+      abi: ritualizedPfpAbi,
+      functionName: "tokenURI",
+      args: [BigInt(id)]
+    });
+    return String(uri);
+  } catch {
+    return "";
+  }
+}
+
+async function readOwnerOf(id: number): Promise<string> {
+  try {
+    const owner = await client.readContract({
+      address: NFT_CONTRACT_ADDRESS,
+      abi: ritualizedPfpAbi,
+      functionName: "ownerOf",
+      args: [BigInt(id)]
+    });
+    return String(owner);
+  } catch {
+    return "";
+  }
+}
+
+async function batchRun<T>(items: number[], batchSize: number, fn: (id: number) => Promise<T>): Promise<T[]> {
+  const results: T[] = [];
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    results.push(...await Promise.all(batch.map(fn)));
+  }
+  return results;
+}
+
 export function NFTGallery() {
   const [nfts, setNfts] = useState<NFTItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +83,6 @@ export function NFTGallery() {
 
     (async () => {
       try {
-        // 1. Get total minted
         const nextId = await client.readContract({
           address: NFT_CONTRACT_ADDRESS,
           abi: ritualizedPfpAbi,
@@ -62,31 +98,16 @@ export function NFTGallery() {
 
         const ids = Array.from({ length: total }, (_, i) => i + 1);
 
-        // 2. Batch fetch tokenURI + ownerOf for all tokens
-        const [uriResults, ownerResults] = await Promise.all([
-          client.multicall({
-            contracts: ids.map((id) => ({
-              address: NFT_CONTRACT_ADDRESS,
-              abi: ritualizedPfpAbi,
-              functionName: "tokenURI" as const,
-              args: [BigInt(id)] as const
-            }))
-          }),
-          client.multicall({
-            contracts: ids.map((id) => ({
-              address: NFT_CONTRACT_ADDRESS,
-              abi: ritualizedPfpAbi,
-              functionName: "ownerOf" as const,
-              args: [BigInt(id)] as const
-            }))
-          })
+        // Individual reads in batches of 10 — no multicall dependency
+        const [tokenURIs, owners] = await Promise.all([
+          batchRun(ids, 10, readTokenURI),
+          batchRun(ids, 10, readOwnerOf)
         ]);
 
-        // 3. Fetch IPFS metadata for each token
         const items = await Promise.all(
           ids.map(async (id, i) => {
-            const tokenUri = uriResults[i].status === "success" ? String(uriResults[i].result) : "";
-            const owner = ownerResults[i].status === "success" ? String(ownerResults[i].result) : "";
+            const tokenUri = tokenURIs[i];
+            const owner = owners[i];
 
             if (!tokenUri) return { tokenId: id, owner, imageUrl: "", name: `Siggy #${id}` };
 
