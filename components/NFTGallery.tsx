@@ -36,13 +36,24 @@ export function NFTGallery() {
     setLoading(true);
     setError(null);
     try {
-      const logs = await publicClient.getLogs({
-        address: NFT_CONTRACT_ADDRESS,
-        event: parseAbiItem(
-          "event PfpMinted(address indexed minter, uint256 indexed tokenId, string tokenURI)"
-        ),
-        fromBlock: 0n
-      });
+      const CHUNK = 99_999n;
+      const latestBlock = await publicClient.getBlockNumber();
+      const event = parseAbiItem(
+        "event PfpMinted(address indexed minter, uint256 indexed tokenId, string tokenURI)"
+      );
+
+      const allLogs: Awaited<ReturnType<typeof publicClient.getLogs>> = [];
+      for (let from = 0n; from <= latestBlock; from += CHUNK + 1n) {
+        const to = from + CHUNK > latestBlock ? latestBlock : from + CHUNK;
+        const chunk = await publicClient.getLogs({
+          address: NFT_CONTRACT_ADDRESS,
+          event,
+          fromBlock: from,
+          toBlock: to
+        });
+        allLogs.push(...chunk);
+      }
+      const logs = allLogs;
 
       const items = await Promise.all(
         logs.map(async (log) => {
