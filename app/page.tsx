@@ -120,10 +120,10 @@ export default function HomePage() {
                     setError(null);
                   }}
                 />
-                <button className="ritual-button min-h-20 w-full rounded-[1.25rem] border-2 text-2xl" disabled={isGenerating || !file} type="button" onClick={generate}>
+                <div className="ritual-button min-h-20 w-full rounded-[1.25rem] border-2 text-2xl flex items-center justify-center gap-3 opacity-80 cursor-default">
                   <Sparkles className="size-8" />
-                  Generate Siggy
-                </button>
+                  Thanks for supporting, see you on mainnet
+                </div>
                 {error && (
                   <div className="rounded-xl border border-red-300/40 bg-red-950/70 px-4 py-3 text-sm font-semibold text-red-100 shadow-card" role="alert">
                     {error}
